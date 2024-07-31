@@ -1,12 +1,12 @@
 import torch.optim
 
 from models.GCN import GCN
+from utils.Evaluate import plot_loss_vs_epoch
 from utils.GraphBuilder import graph_builder
-from utils.Visualization import plot_loss_vs_epoch
 
 if __name__ == '__main__':
     data = graph_builder()
-    print('----------定义图数据为-----------\n')
+    print('----------定义图数据为-----------')
     print(data)
     print(data.train_mask)
 
@@ -22,7 +22,7 @@ if __name__ == '__main__':
         optimizer.zero_grad()
         out = model(data)
 
-        loss = criterion(out[data.train_mask].squeeze(), data.y[data.train_mask])
+        loss = criterion(out[data.train_mask].squeeze(), data.fv[data.train_mask])
         loss.backward()
         optimizer.step()
         if epoch % 20 == 0:

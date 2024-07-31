@@ -1,3 +1,5 @@
+import math
+
 import torch
 
 from utils.MaskBuilder import get_train_num
@@ -7,7 +9,7 @@ def coordinate_reader(file_path):
     coordinates_list = []
     with open(file_path, 'r') as file:
         lines = file.readlines()
-        for line in lines[1:-1]: # 去除node文件第一行和最后一行
+        for line in lines[1:-1]:  # 去除node文件第一行和最后一行
             coordinate = list(map(float, line.split()))
             coordinates_list.append(coordinate[1:])
     coordinates_tensor = torch.tensor(coordinates_list)
@@ -35,27 +37,44 @@ def normalize_coordinates(coordinates):
 
     return torch.stack((x_hat, y_hat, z_hat), dim=1)
 
+
+def get_fv_by_z(coordinate):
+    y, z = coordinate[1], coordinate[2]
+    # 构建曲面sin(pai * y / 5)
+    bounder = math.sin(math.pi * y / 5)
+    if z > (bounder + 4):
+        return 0.66
+    elif z <= (bounder + 4) and z > (bounder + 3):
+        return 0.33
+    elif z <= (bounder + 3) and z > (bounder + 2):
+        return 0
+    elif z <= (bounder + 2) and z > (bounder + 1):
+        return -0.33
+    else:
+        return -0.66
+
+
 # 为训练节点生成地层f_v
-def label_builder():
+def label_fv__builder():
     fv_list = []
-    coordinates = coordinate_reader('D:\My_Code\python\structure-model\dataset\hexahedron.1.node')
     train_num, node_num = get_train_num('D:\My_Code\python\structure-model\dataset\hexahedron.smesh',
                                         'D:\My_Code\python\structure-model\dataset\hexahedron.1.node')
-    for i in range(train_num):
-        z = coordinates[i][2]
-        # 见README.md文档
-        if z >= 0 and z < 1:
-            fv_list.append(-0.66)
-        elif z >= 1 and z < 2:
-            fv_list.append(-0.33)
-        elif z >= 2 and z < 3:
-            fv_list.append(0)
-        elif z >= 3 and z < 4:
-            fv_list.append(0.33)
-        else:
-            fv_list.append(0.66)
+    # for coordinate in coordinates[8:8 + train_num]:
+    #     fv = get_fv_by_z(coordinate)
+    #     fv_list.append(fv)
+    # TODO: 50为初始的训练节点，每个地层面上有50个
+    for i in range(50):
+        fv_list.append(-0.33)
+    for i in range(50):
+        fv_list.append(0)
+    for i in range(50):
+        fv_list.append(0.33)
+    for i in range(50):
+        fv_list.append(0.66)
 
-    fv_tensor = torch.cat((torch.tensor(fv_list), torch.zeros(node_num - train_num)))
+    fv_tensor = torch.cat((torch.zeros(8),
+                           torch.tensor(fv_list),
+                           torch.zeros(node_num - train_num - 8)))
     return fv_tensor
 
 

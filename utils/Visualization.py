@@ -1,9 +1,9 @@
 import numpy as np
 import pyvista as pv
-import matplotlib.pyplot as plt
 
 from utils.AttribuiteBuilder import coordinate_reader
 
+# 可视化四面体网格
 def visulization():
     points = coordinate_reader('D:\My_Code\python\structure-model\dataset\hexahedron.1.node').numpy()
     cells = []
@@ -39,17 +39,6 @@ def visulization():
     plotter = pv.Plotter()
     plotter.add_mesh(tetra_mesh, show_edges=True, scalars='values')
     plotter.show()
-
-
-def plot_loss_vs_epoch(losses, epochs):
-    plt.figure(figsize=(10, 5))
-    plt.plot(epochs, losses, 'r-', label=u'GCN')
-    plt.title('Loss vs. Epoch')
-    plt.xlabel('epoch')
-    plt.ylabel('loss')
-    plt.grid(True)
-    plt.legend()
-    plt.show()
 
 
 if __name__ == '__main__':
