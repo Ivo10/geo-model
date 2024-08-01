@@ -36,8 +36,10 @@ def mask_builder():
 
 
 if __name__ == '__main__':
-    print(get_train_num('D:\My_Code\python\structure-model\dataset\hexahedron.smesh',
-                        'D:\My_Code\python\structure-model\dataset\hexahedron.1.node'))
+    current_file_path = os.path.abspath(__file__)
+    project_path = os.path.dirname(os.path.dirname(current_file_path))
+    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
+                                        project_path + '/dataset/hexahedron.1.node')
     train_mask, test_mask = mask_builder()
     # print(train_mask.shape)
     # print(test_mask.shape)
