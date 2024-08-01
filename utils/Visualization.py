@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pyvista as pv
 
@@ -5,10 +7,12 @@ from utils.AttribuiteBuilder import coordinate_reader
 
 # 可视化四面体网格
 def visulization():
-    points = coordinate_reader('D:\My_Code\python\structure-model\dataset\hexahedron.1.node').numpy()
+    current_file_path = os.path.abspath(__file__)
+    project_path = os.path.dirname(os.path.dirname(current_file_path))
+    points = coordinate_reader(project_path + '/dataset/hexahedron.1.node').numpy()
     cells = []
     cell_type = []
-    with open('D:\My_Code\python\structure-model\dataset\hexahedron.1.ele') as file:
+    with open(project_path + '/dataset/hexahedron.1.ele') as file:
         lines = file.readlines()
         for line in lines[1:-1]:
             numbers = list(map(int, line.split()))[1:]
@@ -26,7 +30,9 @@ def visulization():
     tetra_mesh = pv.UnstructuredGrid(cells, cell_type, points)
 
     point_data = []
-    with open('D:\My_Code\python\structure-model\dataset\output.txt') as file:
+    current_file_path = os.path.abspath(__file__)
+    project_path = os.path.dirname(os.path.dirname(current_file_path))
+    with open(project_path + '/dataset/output.txt') as file:
         lines = file.readlines()
         for line in lines:
             cleaned_line = line.strip()

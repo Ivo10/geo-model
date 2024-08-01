@@ -1,3 +1,5 @@
+import os
+
 import torch
 
 
@@ -16,8 +18,10 @@ def get_train_num(smesh_path, node_path):
 
 # 生成train_mask和test_mask
 def mask_builder():
-    train_num, node_num = get_train_num('D:\My_Code\python\structure-model\dataset\hexahedron.smesh',
-                                        'D:\My_Code\python\structure-model\dataset\hexahedron.1.node')
+    current_file_path = os.path.abspath(__file__)
+    project_path = os.path.dirname(os.path.dirname(current_file_path))
+    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
+                                        project_path + '/dataset/hexahedron.1.node')
 
     train_mask = torch.cat([torch.zeros(8),
                             torch.ones(train_num),

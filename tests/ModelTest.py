@@ -1,3 +1,5 @@
+import os
+
 import torch.optim
 
 from models.GCN import GCN
@@ -38,7 +40,6 @@ if __name__ == '__main__':
         print(results)
         print(results.shape)
 
-        # TODO:写入txt文件中
         result_array = results.numpy()
         with open('./dataset/output.txt', 'w') as file:
             for element in result_array:

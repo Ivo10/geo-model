@@ -1,3 +1,5 @@
+import os
+
 from torch_geometric.data import Data
 
 from utils.AttribuiteBuilder import normalize_coordinates, coordinate_reader, label_fv__builder
@@ -6,8 +8,10 @@ from utils.MaskBuilder import mask_builder
 
 
 def graph_builder():
-    x = normalize_coordinates(coordinate_reader('D:\My_Code\python\structure-model\dataset\hexahedron.1.node'))
-    edge_index = edge_builder('D:\My_Code\python\structure-model\dataset\hexahedron.1.ele')
+    current_file_path = os.path.abspath(__file__)
+    project_path = os.path.dirname(os.path.dirname(current_file_path))
+    x = normalize_coordinates(coordinate_reader(project_path + '/dataset/hexahedron.1.node'))
+    edge_index = edge_builder(project_path + '/dataset/hexahedron.1.ele')
     train_mask, test_mask = mask_builder()
     fv = label_fv__builder()
 
@@ -17,4 +21,4 @@ def graph_builder():
 
 
 if __name__ == '__main__':
-    graph_builder()
+    print(graph_builder())

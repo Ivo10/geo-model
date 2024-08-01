@@ -1,4 +1,5 @@
 import math
+import os
 
 import torch
 
@@ -57,8 +58,10 @@ def get_fv_by_z(coordinate):
 # 为训练节点生成地层f_v
 def label_fv__builder():
     fv_list = []
-    train_num, node_num = get_train_num('D:\My_Code\python\structure-model\dataset\hexahedron.smesh',
-                                        'D:\My_Code\python\structure-model\dataset\hexahedron.1.node')
+    current_file_path = os.path.abspath(__file__)
+    project_path = os.path.dirname(os.path.dirname(current_file_path))
+    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
+                                        project_path + '/dataset/hexahedron.1.node')
     # for coordinate in coordinates[8:8 + train_num]:
     #     fv = get_fv_by_z(coordinate)
     #     fv_list.append(fv)
