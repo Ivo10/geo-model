@@ -1,5 +1,3 @@
-import os
-
 import torch.optim
 
 from models.GCN import GCN

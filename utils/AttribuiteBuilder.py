@@ -3,7 +3,7 @@ import os
 
 import torch
 
-from utils.MaskBuilder import get_train_num
+from config.NumLoader import load_num
 
 
 def coordinate_reader(file_path):
@@ -45,11 +45,11 @@ def get_fv_by_z(coordinate):
     bounder = math.sin(math.pi * y / 5)
     if z > (bounder + 4):
         return 0.66
-    elif z <= (bounder + 4) and z > (bounder + 3):
+    elif (bounder + 4) >= z > (bounder + 3):
         return 0.33
-    elif z <= (bounder + 3) and z > (bounder + 2):
+    elif (bounder + 3) >= z > (bounder + 2):
         return 0
-    elif z <= (bounder + 2) and z > (bounder + 1):
+    elif (bounder + 2) >= z > (bounder + 1):
         return -0.33
     else:
         return -0.66
@@ -58,10 +58,7 @@ def get_fv_by_z(coordinate):
 # 为训练节点生成地层f_v
 def label_fv__builder():
     fv_list = []
-    current_file_path = os.path.abspath(__file__)
-    project_path = os.path.dirname(os.path.dirname(current_file_path))
-    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
-                                        project_path + '/dataset/hexahedron.1.node')
+    train_num, node_num = load_num()
     # for coordinate in coordinates[8:8 + train_num]:
     #     fv = get_fv_by_z(coordinate)
     #     fv_list.append(fv)

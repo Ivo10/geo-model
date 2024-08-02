@@ -2,16 +2,16 @@ import math
 import os
 
 import torch
+
+from config.NumLoader import load_num
 from utils.AttribuiteBuilder import normalize_coordinates, coordinate_reader
-from utils.MaskBuilder import get_train_num
 
 
 # 为训练节点生成法向量alpha
 def label_alpha_builder():
     current_file_path = os.path.abspath(__file__)
     project_path = os.path.dirname(os.path.dirname(current_file_path))
-    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
-                                        project_path + '/dataset/hexahedron.1.node')
+    train_num, node_num = load_num()
     normalized_coordinates = normalize_coordinates(coordinate_reader(project_path + '/dataset/hexahedron.1.node'))
     label_alpha_list = []
     for coordinate in normalized_coordinates[8:258]:

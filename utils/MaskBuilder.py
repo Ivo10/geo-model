@@ -1,28 +1,11 @@
-import os
-
 import torch
 
-
-# 从smesh文件中获取训练节点个数，从node文件中获取生成的节点个数
-def get_train_num(smesh_path, node_path):
-    with open(smesh_path, 'r') as file:
-        line = file.readline()
-        train_num = list(map(int, line.split()))[0] - 8  # 去除8个顶点
-
-    with open(node_path, 'r') as file:
-        line = file.readline()
-        node_num = list(map(int, line.split()))[0]
-
-    return train_num, node_num
+from config.NumLoader import load_num
 
 
 # 生成train_mask和test_mask
 def mask_builder():
-    current_file_path = os.path.abspath(__file__)
-    project_path = os.path.dirname(os.path.dirname(current_file_path))
-    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
-                                        project_path + '/dataset/hexahedron.1.node')
-
+    train_num, node_num = load_num()
     train_mask = torch.cat([torch.zeros(8),
                             torch.ones(train_num),
                             torch.zeros(node_num - train_num - 8)],
@@ -36,10 +19,6 @@ def mask_builder():
 
 
 if __name__ == '__main__':
-    current_file_path = os.path.abspath(__file__)
-    project_path = os.path.dirname(os.path.dirname(current_file_path))
-    train_num, node_num = get_train_num(project_path + '/dataset/hexahedron.smesh',
-                                        project_path + '/dataset/hexahedron.1.node')
     train_mask, test_mask = mask_builder()
     # print(train_mask.shape)
     # print(test_mask.shape)

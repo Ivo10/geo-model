@@ -12,13 +12,14 @@ def graph_builder():
     current_file_path = os.path.abspath(__file__)
     project_path = os.path.dirname(os.path.dirname(current_file_path))
     x = normalize_coordinates(coordinate_reader(project_path + '/dataset/hexahedron.1.node'))
-    edge_index = edge_builder(project_path + '/dataset/hexahedron.1.ele')
+    edge_index, matrix = edge_builder(project_path + '/dataset/hexahedron.1.ele')
     train_mask, test_mask = mask_builder()
 
     fv = label_fv__builder()
     alpha = label_alpha_builder()
 
-    data = Data(x=x, edge_index=edge_index, fv=fv, alpha=alpha, train_mask=train_mask, test_mask=test_mask)
+    data = Data(x=x, edge_index=edge_index, matrix=matrix, fv=fv, alpha=alpha,
+                train_mask=train_mask, test_mask=test_mask)
 
     return data
 
