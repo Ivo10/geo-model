@@ -1,5 +1,7 @@
 import torch.optim
 
+from loss.ComputeGradient import compute_gradients
+from loss.OrientationLoss import OrientationLoss
 from models.GCN import GCN
 from utils.Evaluate import plot_loss_vs_epoch
 from utils.GraphBuilder import graph_builder
@@ -11,22 +13,29 @@ if __name__ == '__main__':
     print(data.train_mask)
 
     model = GCN(data)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
-    criterion = torch.nn.MSELoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.005, weight_decay=5e-4)
+    criterion_interface = torch.nn.MSELoss()
+    criterion_orientation = OrientationLoss()
 
     epochs = []
     losses = []
 
-    for epoch in range(300):
+    for epoch in range(200):
         model.train()
         optimizer.zero_grad()
         out = model(data)
 
-        loss = criterion(out[data.train_mask].squeeze(), data.fv[data.train_mask])
+        gradient = compute_gradients(data.x, data.matrix, out)
+        gradient = torch.squeeze(gradient)  # gradient维度应该为n*3
+
+        loss_interface = criterion_interface(out[data.train_mask].squeeze(), data.fv[data.train_mask])
+        loss_orientation = criterion_orientation(gradient[data.train_mask], data.alpha[data.train_mask])
+
+        loss = loss_interface + loss_orientation
+
         loss.backward()
         optimizer.step()
-        if epoch % 20 == 0:
-            print('epoch: {}, loss: {:.4f}'.format(epoch, loss.item()))
+        print('epoch: {}, loss: {:.4f}'.format(epoch, loss.item()))
 
         epochs.append(epoch)
         losses.append(loss.item())

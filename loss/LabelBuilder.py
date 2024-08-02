@@ -14,7 +14,7 @@ def label_alpha_builder():
     train_num, node_num = load_num()
     normalized_coordinates = normalize_coordinates(coordinate_reader(project_path + '/dataset/hexahedron.1.node'))
     label_alpha_list = []
-    for coordinate in normalized_coordinates[8:258]:
+    for coordinate in normalized_coordinates[8:8 + train_num]:
         y = coordinate[1]
         alpha_x = 0
         alpha_y = (math.pi / 5) * math.cos(math.pi * y)
