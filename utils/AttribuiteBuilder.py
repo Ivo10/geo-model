@@ -1,5 +1,4 @@
 import math
-import os
 
 import torch
 
@@ -56,7 +55,7 @@ def get_fv_by_z(coordinate):
 
 
 # 为训练节点生成地层f_v
-def label_fv__builder():
+def label_fv_builder():
     fv_list = []
     train_num, node_num = load_num()
     # for coordinate in coordinates[8:8 + train_num]:

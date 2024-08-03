@@ -3,7 +3,7 @@ import os
 from torch_geometric.data import Data
 
 from loss.LabelBuilder import label_alpha_builder
-from utils.AttribuiteBuilder import normalize_coordinates, coordinate_reader, label_fv__builder
+from utils.AttribuiteBuilder import normalize_coordinates, coordinate_reader, label_fv_builder
 from utils.EdgeBuilder import edge_builder
 from utils.MaskBuilder import mask_builder
 
@@ -15,7 +15,7 @@ def graph_builder():
     edge_index, matrix = edge_builder(project_path + '/dataset/hexahedron.1.ele')
     train_mask, test_mask = mask_builder()
 
-    fv = label_fv__builder()
+    fv = label_fv_builder()
     alpha = label_alpha_builder()
 
     data = Data(x=x, edge_index=edge_index, matrix=matrix, fv=fv, alpha=alpha,

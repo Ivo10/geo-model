@@ -6,8 +6,11 @@ import pyvista as pv
 from utils.AttribuiteBuilder import coordinate_reader
 
 
-# 可视化四面体网格
 def visulization():
+    """
+    可视化四面体网格
+    :return:
+    """
     current_file_path = os.path.abspath(__file__)
     project_path = os.path.dirname(os.path.dirname(current_file_path))
     points = coordinate_reader(project_path + '/dataset/hexahedron.1.node').numpy()
@@ -44,7 +47,7 @@ def visulization():
     tetra_mesh.point_data['values'] = point_data
 
     plotter = pv.Plotter()
-    plotter.add_mesh(tetra_mesh, show_edges=True, scalars='values')
+    plotter.add_mesh(tetra_mesh, scalars='values', cmap='coolwarm')
     plotter.show()
 
 
